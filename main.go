@@ -5,6 +5,7 @@ import (
   "log"
   "message-service/controller"
   "message-service/router"
+  "message-service/service"
 )
 
 func main() {
@@ -12,8 +13,11 @@ func main() {
 
   // Start the server on port 8080
   log.Println("Server is running on port 8080")
-  ctrl := controller.NewMessageController()
 
+  messageService := service.NewMessageService()
+  ctrl := controller.NewMessageController(messageService)
+
+  // Setup routes
   router.SetupRoutes(app, ctrl)
   err := app.Listen(":8080")
   if err != nil {
