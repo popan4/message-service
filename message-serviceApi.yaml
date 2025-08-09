@@ -1,0 +1,161 @@
+openapi: 3.1.0
+info:
+  title: Message service API
+  description: Message service API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+    description: Local server
+
+paths:
+  /createMsg:
+    post:
+      summary: Create a message
+      requestBody:
+        description: Message object to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageCreateRequest'
+      responses:
+        '201':
+          description: Message created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /getMsg/{id}:
+    get:
+      summary: Get message by ID
+      responses:
+        '200':
+          description: Message retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /getMsg:
+    get:
+      summary: Get all messages
+      responses:
+        '200':
+          description: Message list retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+
+        '404':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /updateMsg/{id}:
+    put:
+      summary: Update a message
+      requestBody:
+        description: Message object to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageUpdateRequest'
+      responses:
+        '200':
+          description: Message updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '400':
+          description: validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: record not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /deleteMsg/{id}:
+    delete:
+      summary: Update a message
+      responses:
+        '204':
+          description: Message Deleted successfully
+        '401':
+          description: record not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "12345"
+        text:
+          type: string
+          example: "12321"
+        isPalindrome:
+          type: boolean
+          example: true
+      required:
+        - id
+        - text
+        - isPalindrome
+
+    MessageCreateRequest:
+      type: object
+      properties:
+        messageText:
+          type: string
+          example: "12321"
+      required:
+        - messageText
+
+    MessageUpdateRequest:
+      type: object
+      properties:
+        messageText:
+          type: string
+          example: "hello"
+      required:
+        - messageText
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "messageText is required and cannot be empty"
+      required:
+        - error
