@@ -1,20 +1,23 @@
 package main
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"log"
+  "github.com/gofiber/fiber/v2"
+  "log"
+  "message-service/controller"
+  "message-service/router"
 )
 
 func main() {
-	app := fiber.New()
-	// Define a route for the GET method on the root path '/'
+  app := fiber.New()
 
-	// Start the server on port 3000
-	log.Println("Server is running on port 8080")
+  // Start the server on port 8080
+  log.Println("Server is running on port 8080")
+  ctrl := controller.NewMessageController()
 
-	err := app.Listen(":8080")
-	if err != nil {
-		return
-	}
+  router.SetupRoutes(app, ctrl)
+  err := app.Listen(":8080")
+  if err != nil {
+	return
+  }
 
 }
